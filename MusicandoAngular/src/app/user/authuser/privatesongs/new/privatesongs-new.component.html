@@ -1,0 +1,127 @@
+
+<div class="border-rounded-0 border-dark bg-secondary my-shadow-inset">
+
+  <div class="text-white text-center font-weight-bold bg-dark w-100  d-flex flex-row align-items-center">
+    <div class="text-center" style="width:31px;"><span><i class="fa fa-bars" aria-hidden="true"></i></span></div>
+    <div style="flex-grow:1; flex-shrink:1;"><span>Criar</span></div>
+    <div><button title="fechar" class="btn btn-sm btn-dark" [disabled]="!allowClose"
+                 (click)="close()" type="button"><i class="fa fa-close" aria-hidden="true"></i></button></div>
+  </div>
+
+  <div class="p-1">
+
+    <!-- LOAD FROM YOUTUBE-->
+    <div [ngSwitch]="loadYoutubeStateSwitch.currentState">
+
+      <!-- LOAD FORM -->
+      <div class="bg-dark p-1" *ngSwitchCase="'form'">
+        <h5 class="bg-dark text-center text-white p-1 m-0"> Carregar video do <i class="fa fa-youtube" aria-hidden="true"></i></h5>
+        <form #loadYoutubeForm="ngForm">
+          <div class="input-group input-group-sm">
+            <input type="text" class="form-control mt-1" id="loadYoutube" placeholder="Youtube URL" [(ngModel)]="youtubeUrl" name="ytUrl" required pattern="(https?\:\/\/)?((www\.)?youtube\.com|youtu\.?be)\/watch\?v=.+">
+          </div>
+          <button type="submit" (click)="loadYoutube(); $event.preventDefault()" class="btn btn-primary btn-sm btn-block mt-1">carregar video</button>
+        </form>
+      </div>
+
+      <!-- LOAD WAIT -->
+      <div id="loadYoutubeForm-wait" *ngSwitchCase="'wait'">
+        <div class="alert alert-light text-center m-0" role="alert">
+          a carregar video <i class="fa fa-spinner fa-pulse" aria-hidden="true"></i>
+        </div>
+      </div>
+
+      <!-- LOAD FAIL -->
+      <div id="loadYoutubeForm-fail" *ngSwitchCase="'fail'">
+        <div class="alert alert-danger text-center m-0" role="alert">
+          ocorreu um erro <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+        </div>
+      </div>
+
+    </div>
+
+
+    <!-- CREATE -->
+    <div [hidden]="!showVideo" class="bg-dark mt-1 p-1">
+
+      <div style="padding-bottom:56.25%; width:100%;position:relative">
+        <div style="position:absolute; top:0; left:0; width:100%; height:100%">
+          <div id="playerps"></div>
+        </div>
+      </div>
+      <div class="w-100 text-center text-white text-truncate font-weight-bold pt-1">{{loadedVideo.title}}</div>
+
+      <div [ngSwitch]="createStateSwitch.currentState">
+
+        <!-- CREATE FORM -->
+        <form #newPrivateSongForm="ngForm" *ngSwitchCase="'form'">
+
+          <div class="input-group input-group-sm mt-1">
+            <span class="input-group-addon p-0 d-block w-50 text-center border-dark" style="line-height:29px;">Começar em:</span>
+            <input [(ngModel)]="newPrivateSong.startAt" name="startAt" type="text" class="form-control form-control-sm text-center p-0 border-dark" id="startAt" placeholder="00:00:00" pattern="[0-9][0-9]:[0-9][0-9]:[0-9][0-9]">
+            <span class="input-group-btn">
+              <button title="tempo actual" class="btn btn-secondary border-dark" type="button" (click)="getStartTimeFromVideo()"><i class="fa fa-pause" aria-hidden="true"></i></button>
+            </span>
+          </div>
+
+          <div class="input-group input-group-sm mt-1">
+            <span class="input-group-addon p-0 d-block w-50 text-center border-dark" style="line-height:29px;">Parar em:</span>
+            <input [(ngModel)]="newPrivateSong.endAt" name="endAt" type="text" class="form-control form-control-sm text-center p-0 border-dark" id="endAt" placeholder="00:00:01" pattern="[0-9][0-9]:[0-9][0-9]:[0-9][0-9]">
+            <span class="input-group-btn">
+              <button title="tempo actual" class="btn btn-secondary border-dark" type="button" (click)="getEndTimeFromVideo()"><i class="fa fa-pause" aria-hidden="true"></i></button>
+            </span>
+          </div>
+
+          <div class="input-group input-group-sm mt-1">
+            <span class="input-group-addon p-0 d-block w-25 text-center border-dark" style="line-height:31px;" id="name">Título</span>
+            <input [(ngModel)]="newPrivateSong.name" name="name" type="text" required maxlength="30" class="form-control border-dark">
+          </div>
+
+          <div class="input-group input-group-sm mt-1">
+            <span class="input-group-addon p-0 d-block w-25 text-center border-dark" style="line-height:31px;" id="artistName">Artista</span>
+            <input [(ngModel)]="newPrivateSong.artistName" name="artistName" required maxlength="30" type="text" class="form-control border-dark">
+          </div>
+
+          <div class="input-group input-group-sm mt-1">
+            <span class="input-group-addon p-0 d-block w-25 text-center border-dark" style="line-height:31px;" id="albumName">Album</span>
+            <input [(ngModel)]="newPrivateSong.albumName" name="albumName" type="text" maxlength="30" class="form-control border-dark">
+          </div>
+
+          <div class="w-100 text-center mt-2">
+            <button type="submit" class="btn btn-sm btn-primary btn-block" [disabled]="!newPrivateSongForm.valid" (click)="createPrivateSong()">Criar</button>
+          </div>
+
+        </form>
+
+        <!-- CREATE WAIT -->
+        <div id="newPrivateSongForm-wait" *ngSwitchCase="'wait'">
+          <div class="alert alert-light text-center m-0 mt-2" role="alert">
+            a criar música  <i class="fa fa-spinner fa-pulse" aria-hidden="true"></i>
+          </div>
+        </div>
+
+        <!-- CREATE SUCCESS -->
+        <div id="newPrivateSongForm-success" *ngSwitchCase="'success'">
+          <div class="alert alert-success text-center m-0 mt-2" role="alert">
+            a música foi criada <i class="fa fa-check-circle" aria-hidden="true"></i>
+          </div>
+        </div>
+
+        <!-- CREATE FAIL -->
+        <div id="newPrivateSongForm-fail" *ngSwitchCase="'fail'">
+          <div class="alert alert-danger text-center m-0 mt-2" role="alert">
+            ocorreu um erro <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+          </div>
+        </div>
+
+      </div>
+
+      </div>
+
+    </div>
+  </div>
+
+
+
+
+

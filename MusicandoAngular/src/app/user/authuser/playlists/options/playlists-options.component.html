@@ -1,0 +1,103 @@
+
+<div>
+
+  <div class="text-white text-center font-weight-bold bg-dark w-100  d-flex flex-row align-items-center">
+    <div class="text-center" style="width:31px;"><span><i class="fa fa-cog" aria-hidden="true"></i></span></div>
+    <div style="flex-grow:1; flex-shrink:1;"><span>Opções</span></div>
+    <div><button class="btn btn-sm btn-dark" [disabled]="!allowClose" (click)="close()" type="button"><i class="fa fa-close" aria-hidden="true"></i></button></div>
+  </div>
+
+  <div class="border-dark bg-secondary my-shadow-inset p-1">
+
+    <!-- OPTION: CHANGE NAME -->
+    <div *ngIf="deleteStateSwitch.currentState === 'form'" id="option-change-name">
+
+      <div [ngSwitch]="changeStateSwitch.currentState">
+
+        <div *ngSwitchCase="'form'" class="bg-dark text-center border border-dark my-shadow p-1 mb-1">
+          <p class="text-white font-italic m-0">{{playlistForOptions.name}}</p>
+        </div>
+
+        <!-- CHANGE NAME FORM -->
+        <div id="changeNameForm-form" *ngSwitchCase="'form'" class="text-center border border-dark my-shadow">
+          <h6 class="bg-dark text-white p-1 m-0">Mudar nome da playlist</h6>
+          <form #changeNameForm="ngForm">
+            <div class="form-group bg-dark text-center p-1 m-0">
+              <input #changeName="ngModel" type="text" name="changeName" id="changeName" class="form-control form-control-sm" [(ngModel)]="newName"
+                     placeholder="Novo nome da playlist" pattern="{{userService.PLAYLIST_NAME_PATTERN}}" required>
+              <button (click)="changeNamePlaylist(); $event.preventDefault()" [disabled]="changeNameForm.invalid" class="btn btn-primary btn-sm btn-block mt-1" type="submit">mudar nome</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- CHANGE NAME WAIT -->
+        <div id="changeNameForm-wait" *ngSwitchCase="'wait'">
+          <div class="alert alert-light text-center m-0" role="alert">
+            a mudar nome  <i class="fa fa-spinner fa-pulse" aria-hidden="true"></i>
+          </div>
+        </div>
+
+        <!-- CHANGE NAME SUCCESS -->
+        <div id="changeNameForm-success" *ngSwitchCase="'success'">
+          <div class="alert alert-success text-center m-0" role="alert">
+            o nome foi modificado <i class="fa fa-check-circle" aria-hidden="true"></i>
+          </div>
+        </div>
+
+        <!-- CHANGE NAME FAIL -->
+        <div id="changeNameForm-fail" *ngSwitchCase="'fail'">
+          <div class="alert alert-danger text-center m-0" role="alert">
+            ocorreu um erro <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- OPTION: DELETE -->
+
+    <div *ngIf="changeStateSwitch.currentState === 'form'" id="option-delete" class="p-0">
+
+      <div class="p-0" [ngSwitch]="deleteStateSwitch.currentState">
+
+        <!-- DELETE FORM -->
+        <div id="deleteForm-form" *ngSwitchCase="'form'" class="text-center mt-1 border border-dark my-shadow">
+          <h6 class="bg-dark text-white p-1 m-0">Apagar Playlist</h6>
+          <div class="bg-dark p-1">
+            <form #deleteForm="ngForm">
+              <button (click)="deletePlaylist(); $event.preventDefault()" [disabled]="deleteForm.invalid" class="btn btn-danger btn-sm btn-block" type="submit">apagar</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- DELETE WAIT -->
+        <div id="deleteForm-wait" *ngSwitchCase="'wait'">
+          <div class="alert alert-light text-center m-0" role="alert">
+            a apagar playlist  <i class="fa fa-spinner fa-pulse" aria-hidden="true"></i>
+          </div>
+        </div>
+
+        <!-- DELETE SUCCESS -->
+        <div id="deleteForm-success" *ngSwitchCase="'success'">
+          <div class="alert alert-success text-center m-0" role="alert">
+            a playlist foi apagada <i class="fa fa-check-circle" aria-hidden="true"></i>
+          </div>
+        </div>
+
+        <!-- DELETE FAIL -->
+        <div id="deleteForm-fail" *ngSwitchCase="'fail'">
+          <div class="alert alert-danger text-center m-0" role="alert">
+            ocorreu um erro <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+

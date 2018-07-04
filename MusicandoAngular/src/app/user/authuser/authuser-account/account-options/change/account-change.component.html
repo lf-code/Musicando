@@ -1,0 +1,75 @@
+
+<!--CHANGE PASSWORD-->
+
+<div class="border border-dark" >
+
+  <!--CHANGE PASSWORD HEADER-->
+  <div class="text-white text-center font-weight-bold bg-dark w-100  d-flex flex-row align-items-center">
+    <div class="text-center" style="width:31px;"><span><i class="fa fa-bars" aria-hidden="true"></i></span></div>
+    <div style="flex-grow:1; flex-shrink:1;"><span>Modificar Password</span></div>
+    <div><button class="btn btn-sm btn-dark" [disabled]="showStateSwitch.currentState !== 'form'" (click)="close()" type="button"><i class="fa fa-close" aria-hidden="true"></i></button></div>
+  </div>
+
+  <div class="bg-secondary p-2" [ngSwitch]="showStateSwitch.currentState">
+
+    <!--CHANGE PASSWORD FORM-->
+    <form #changePasswordForm="ngForm" *ngSwitchCase="'form'">
+      <div class="form-group m-0 mb-1 p-0">
+        <label class="m-0 p-0 font-weight-bold" for="currentPassword">password actual</label>
+        <input type="password" class="form-control text-center m-0 p-0" id="currentPassword"
+               pattern="{{userService.MY_REGEX.password}}" required placeholder="" #currentPassword="ngModel" [(ngModel)]="changePasswordModel.currentPassword" name="currentPassword">
+      </div>
+      <div class="form-group m-0 mb-1 p-0">
+        <label class="m-0 p-0 font-weight-bold" for="newPassword">nova password</label>
+        <input type="password" class="form-control text-center m-0 p-0" id="newPassword"
+               pattern="{{userService.MY_REGEX.password}}" required placeholder="" #newPassword="ngModel" [(ngModel)]="changePasswordModel.newPassword" name="newPassword">
+      </div>
+      <div class="form-group m-0 mb-1 p-0">
+        <label class="m-0 p-0 font-weight-bold" for="confirmNewPassword">confirmar nova password</label>
+        <input type="password" class="form-control text-center m-0 p-0" id="confirmNewPassword"
+               pattern="{{userService.MY_REGEX.password}}" required placeholder="" #confirmNewPassword="ngModel" [(ngModel)]="changePasswordModel.confirmNewPassword" name="confirmNewPassword">
+      </div>
+
+      <!--ALERTS-->
+      <div class="alert alert-warning p-1 my-1 text-justify" role="alert" [hidden]="changePasswordForm.form.pristine || (changePasswordForm.form.valid && passwordsMatch) ">
+        <div [hidden]="newPassword.pristine || newPassword.valid" class="mb-1">
+          <small><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> A password deverá ter entre 8 e 24 caracteres. Utilize apenas caracteres alfanúmericos.</small>
+        </div>
+        <div [hidden]="confirmNewPassword.pristine || (confirmNewPassword.valid && passwordsMatch)" class="mb-1">
+          <small><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Verifique se a confirmação da password está correcta.</small>
+        </div>
+        <div [hidden]="changePasswordForm.form.valid">
+          <small><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Preencha todos os campos.</small>
+        </div>
+      </div>
+
+      <button type="submit" [disabled]="!(changePasswordForm.valid && passwordsMatch)" (click)="changePassword(); $event.preventDefault()"
+              class="btn btn-primary btn-sm btn-block m-0 mt-2 my-cursor-pointer">
+        mudar password
+      </button>
+    </form>
+
+    <!--CHANGE PASSWORD WAIT-->
+    <div *ngSwitchCase="'wait'">
+      <span>a modificar password <i class="fa fa-spinner fa-pulse" aria-hidden="true"></i></span>
+    </div>
+
+    <!--CHANGE PASSWORD SUCCESS-->
+    <div *ngSwitchCase="'success'">
+      <div class="alert alert-success m-0 mb-1 p-1" role="alert">A password foi alterada.</div>
+    </div>
+
+    <!--CHANGE PASSWORD ERROR-->
+    <div *ngSwitchCase="'fail'">
+      <div class="alert alert-danger m-0 mb-1 p-1" role="alert">
+        <div>Ocorreu um erro.</div>
+        <div>A sua conta não foi alterada.</div>
+      </div>
+      <div>
+        <button type="button" (click)="showForm()" class="btn btn-dark btn-sm btn-block">tentar novamente</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>

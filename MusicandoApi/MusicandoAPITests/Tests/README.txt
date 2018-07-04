@@ -1,0 +1,1 @@
+Currently only available for PrivateSongController.

@@ -1,0 +1,69 @@
+<div class="card w-100 border-0 mb-3">
+
+  <!-- ARTIST NAME WITH BACKGROUND IMG OF HIS FIRST ALBUM -->
+  <div class="card-body rounded-top p-1 p-lg-2 p-xl-3 border border-secondary border-bottom-0 my-img-background" [ngStyle]="currentStyles">
+    <div class="px-1 my-overlay-title text-truncate my-cursor-pointer" (click)="playArtistHitsPlaylist()">
+      <span><i class="fa fa-play-circle-o" aria-hidden="true"></i> </span>{{artist.name}}
+    </div>
+  </div>
+
+  <div class="card-body m-0 p-1 p-lg-2 p-xl-3 border border-secondary my-shadow-inset">
+
+    <!-- LIST OF ALBUMS IN ALBUM PAGE (as thumbnail of album cover) -->
+    <div class="w-100 d-flex flex-row flex-wrap justify-content-around">
+
+      <div class="d-flex flex-column align-items-center p-1" *ngFor="let album of albumsInDisplay" style="width:33%;">
+
+        <div class="my-album-container-img my-shadow" [class.border-primary]="selectedAlbum !==null && album.albumId === selectedAlbum.albumId">
+          <img class="my-album-thumbnail" src="{{album.imgLink}}" alt="album" title="{{album.name}}">
+          <div class="my-album-play rounded my-cursor-pointer" (click)="playAlbum(album.albumId)"><i class="fa fa-play-circle-o" aria-hidden="true"></i></div>
+        </div>
+
+        <div class="w-100 mt-1 my-album-container-name" (click)="selectAlbum(album.albumId)">
+          <div class="w-100 text-center text-truncate my-album-name" style="font-size:12px; font-weight:bold;">{{album.name}}</div>
+          <div *ngIf="!(selectedAlbum !==null && album.albumId === selectedAlbum.albumId)" class="w-100 text-center text-truncate text-primary my-album-tracks">ver faixas</div>
+          <div *ngIf="selectedAlbum !== null && album.albumId === selectedAlbum.albumId && !waitForServer.loadingAlbumTracks" class="w-100 text-center text-truncate text-secondary" style="font-size:12px;">esconder faixas</div>
+          <div *ngIf="selectedAlbum !== null && album.albumId === selectedAlbum.albumId && waitForServer.loadingAlbumTracks" class="w-100 text-center text-truncate text-secondary" style="font-size:12px;"><span><i class="fa fa-spinner fa-pulse" aria-hidden="true"></i></span></div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- PICK A PAGE-->
+    <div *ngIf="totalAlbumsPages>1" class="w-100 d-flex justify-content-end align-items-center">
+      <div style="font-size:12px;">MAIS ALBUMS: </div>
+      <div class="mx-1 text-dark" *ngFor="let k of albumsPageArray"><i class="fa fa-{{ k === albumsPage? 'square':'square-o'}} my-cursor-pointer" aria-hidden="true" (click)="changeAlbumPage(k)"></i></div>
+    </div>
+
+    <!-- when 'show album tracks' is selected, displays... -->
+    <div *ngIf="showTracksForSelectedAlbum" class="p-0">
+
+      <div class="p-1 text-center bg-primary text-white">{{selectedAlbum.name}}</div>
+
+      <!-- ...a button with song name that plays the song when clicked and
+          a checkbox to select the track for track options [checkbox might require user authentication] -->
+      <div class="d-flex flex-row flex-nowrap align-items-center" *ngFor="let track of selectedAlbum.tracks">
+        <div class="text-center text-nowrap mr-1" style="width:20px;height:21px; line-height:21px; flex-shrink:0;flex-grow:0;">
+          <input #mycheckbox [disabled]="track.duration === null" (change)="albumTrackCheckedChanged(mycheckbox.checked, track.songId)" type="checkbox" name="vehicle" value="Car" style="cursor:pointer">
+        </div>
+        <button title="tocar" type="button" class="btn btn-light btn-sm p-0 text-dark text-left text-truncate px-1 my-cursor-pointer text-primary" [class.bg-warning]="highlightedTrackId === track.songId" style="flex-shrink:1;flex-grow:1;"
+                (click)="playAlbumSong(track.songId)" [disabled]="track.duration === null">
+          {{track.name}}
+        </button>
+        <div class="text-center text-nowrap text-muted" style="width:40px; flex-shrink:0;flex-grow:0;"><small>{{track.duration === null ? '--:--': track.duration}}</small></div>
+      </div>
+
+      <!-- ... a button that shows track options for selected track [might require user authentication] -->
+      <div class="w-100 text-center">
+        <button title="opções" type="button" class="w-100 btn btn-primary btn-sm my-cursor-pointer" style="line-height:12px; font-size:12px; padding:4px; border:none;"
+                [disabled]="!browseService.userService.isPlayableSongOptionsAvailable || checkedAlbumTracksIds.length==0" (click)="showSongOptions()">
+          adicionar a playlist
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+

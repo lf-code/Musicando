@@ -1,0 +1,18 @@
+
+<div class="card text-center my-shadow">
+  <div class="p-1" [ngSwitch]="showStateSwitch.currentState">
+
+      <!--LOGIN-->
+      <div *ngSwitchCase="'login'">
+        <login (onGoToRegister)="showRegister()" ></login>
+      </div>
+
+      <!--REGISTER-->
+      <div *ngSwitchCase="'register'">
+        <register (onClose)="showLogin()"></register>
+      </div>
+
+    </div>
+</div>
+
+

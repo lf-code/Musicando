@@ -1,0 +1,13 @@
+﻿.larger-icon{
+  font-size:48px;
+}
+
+.smaller-icon {
+  font-size: 24px;
+}
+
+.my-scrollable{
+  max-height: 200px;
+  overflow-y: auto;
+}
+

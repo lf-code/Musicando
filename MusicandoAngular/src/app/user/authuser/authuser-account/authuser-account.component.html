@@ -1,0 +1,34 @@
+<!--AUTHUSER ACCOUNT INFO-->
+<div class="card text-center my-shadow">
+
+  <!--AUTHUSER INFO-->
+  <div class="card-header">
+    <i class="fa fa-user-circle-o " aria-hidden="true"></i>
+    <h4 test-tag="auth-username" id="auth-username" class="card-title m-0">{{user.username}}</h4>
+  </div>
+
+  <div [ngSwitch]="showStateSwitch.currentState">
+
+    <!--AUTHUSER ACTIONS-->
+    <div *ngSwitchCase="'actions'">
+      <button type="button" (click)="showOptions()" class="btn btn-light btn-sm btn-block m-0">opções</button>
+      <button type="button" (click)="logout()" class="btn btn-light btn-sm btn-block m-0">logout</button>
+    </div>
+
+    <!--AUTHUSER OPTIONS-->
+    <div *ngSwitchCase="'options'">
+      <account-options [user]="user" (onClose)="onOptionsClose($event)"></account-options>
+    </div>
+
+    <!--LOGOUT WAIT-->
+    <div *ngSwitchCase="'logoutWait'">
+      <div class="p-2"><span>a efectuar logout <i class="fa fa-spinner fa-pulse" aria-hidden="true"></i></span></div>
+    </div>
+
+  </div>
+
+</div>
+
+
+
+

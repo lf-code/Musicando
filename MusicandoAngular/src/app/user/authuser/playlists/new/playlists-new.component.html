@@ -1,0 +1,51 @@
+
+<div class="border-rounded-0 border-dark bg-secondary my-shadow-inset">
+
+  <!--HEADER-->
+  <div class="text-white text-center font-weight-bold bg-dark w-100  d-flex flex-row align-items-center">
+    <div class="text-center" style="width:31px;"><span><i class="fa fa-bars" aria-hidden="true"></i></span></div>
+    <div style="flex-grow:1; flex-shrink:1;"><span>Criar</span></div>
+    <div><button class="btn btn-sm btn-dark" [disabled]="!allowClose" (click)="close()" type="button"><i class="fa fa-close" aria-hidden="true"></i></button></div>
+  </div>
+
+  <div class="p-1" [ngSwitch]="showStateSwitch.currentState">
+
+    <!-- CREATE NEW PLAYLIST FORM -->
+    <div id="newForm-form" *ngSwitchCase="'form'" class="text-center border border-dark my-shadow">
+      <h6 class="bg-dark text-white p-1 m-0">Criar nova playlist</h6>
+      <form #newForm="ngForm">
+        <div class="form-group bg-dark text-center p-1 m-0">
+          <input #newName="ngModel" type="text" name="newName" id="newName" class="form-control form-control-sm" [(ngModel)]="newPlaylistName"
+                 placeholder="Nome da playlist" pattern="{{userService.PLAYLIST_NAME_PATTERN}}" required>
+          <button (click)="createPlaylist(); $event.preventDefault()" [disabled]="newForm.invalid" class="btn btn-primary btn-sm btn-block mt-1" type="submit">criar</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- WAITING FOR RESPONSE -->
+    <div id="newForm-wait" *ngSwitchCase="'wait'">
+      <div class="alert alert-light text-center m-0" role="alert">
+        A criar playlist  <i class="fa fa-spinner fa-pulse" aria-hidden="true"></i>
+      </div>
+    </div>
+
+    <!-- SUCCESSFUL REQUEST -->
+    <div id="newForm-success" *ngSwitchCase="'success'">
+      <div class="alert alert-success text-center m-0" role="alert">
+        A playlist foi criada <i class="fa fa-check-circle" aria-hidden="true"></i>
+      </div>
+    </div>
+
+    <!-- FAILED REQUEST -->
+    <div id="newForm-fail" *ngSwitchCase="'fail'">
+      <div class="alert alert-danger text-center m-0" role="alert">
+        Ocorreu um erro <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+
+

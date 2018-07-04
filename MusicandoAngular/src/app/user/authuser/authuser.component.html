@@ -1,0 +1,21 @@
+
+<!--AUTHUSER ACCOUNT INFO-->
+<authuser-account [user]="user" ></authuser-account>
+
+<!--AUTHUSER APP INFO-->
+
+<!--PRIVATE SONGS-->
+<div [hidden]="!show.privatesongs" >
+  <privatesongs></privatesongs>
+</div>
+
+<!--PLAYLISTS-->
+<div [hidden]="!show.playlists">
+  <playlists></playlists>
+</div>
+
+<!--PLAYABLESONG OPTIONS-->
+<div *ngIf="show.playablesongOptions">
+  <playablesong-options (onClose)="closePlayablesongOptions($event)" [songOptionsContext]="songOptionsContext" [playlists]="userPlaylists"></playablesong-options>
+</div>
+

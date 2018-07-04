@@ -1,0 +1,101 @@
+
+<div class="border border-dark" [ngSwitch]="showStateSwitch.currentState">
+
+  <div class="text-white text-center font-weight-bold bg-dark w-100  d-flex flex-row align-items-center">
+    <div class="w-50"><button class="btn btn-dark btn-block btn-sm text-primary" [disabled]="showStateSwitch.currentState !== 'form'" (click)="close()" type="button"><small>LOGIN</small></button></div>
+    <div class="w-50"><span>Registar</span></div>
+  </div>
+
+  <!--REGISTER FORM-->
+  <form #registerForm="ngForm" *ngSwitchCase="'form'" class="bg-secondary p-2">
+
+    <div>
+
+      <div class="input-group input-group-sm mb-2">
+        <span class="input-group-addon p-0 d-block text-center border-dark font-weight-bold" style="line-height:31px; width:72px;" id="name">email</span>
+        <input [(ngModel)]="registerData.email" name="email" type="text" id="registerEmail" placeholder="@email" pattern="{{userService.MY_REGEX.email}}" required #email="ngModel" class="form-control border-dark">
+      </div>
+
+      <div class="input-group input-group-sm mb-2">
+        <span class="input-group-addon p-0 d-block text-center border-dark font-weight-bold" style="line-height:31px; width:72px;" id="name">username</span>
+        <input [(ngModel)]="registerData.username" name="username" type="text" id="registerUsername" placeholder="username" pattern="{{userService.MY_REGEX.username}}" required #username="ngModel" class="form-control border-dark">
+      </div>
+
+      <div class="input-group input-group-sm" style="margin-bottom:1px;">
+        <span class="input-group-addon p-0 d-block text-center border-dark font-weight-bold" style="line-height:31px; width:72px;" id="name">password</span>
+        <input  [(ngModel)]="registerData.password" name="password" type="password" id="registerPassword" placeholder="password" pattern="{{userService.MY_REGEX.password}}" required #password="ngModel" class="form-control border-dark">
+      </div>
+
+      <div class="input-group input-group-sm mb-2">
+        <span class="input-group-addon p-0 d-block text-center border-dark" style="line-height:27px; width:72px;" id="name">confirmar</span>
+        <input [disabled]="password.invalid" [(ngModel)]="registerData.confirmPassword" name="confirmPassword" type="password" id="registerConfirmPassword" pattern="{{userService.MY_REGEX.password}}"
+               placeholder="confirmar password" required #confirmPassword="ngModel" class="form-control border-dark">
+      </div>
+
+    </div>
+
+    <!--REGISTER FORM ERRORS-->
+    <div class="alert alert-warning p-2 text-left" role="alert" [hidden]="registerForm.form.pristine || (registerForm.form.valid && passwordsMatch)">
+      <div [hidden]="email.pristine || email.valid" class="mb-1">
+        <small><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> O e-mail deverá ter o formato correcto.</small>
+      </div>
+      <div [hidden]="username.pristine || username.valid" class="mb-1">
+        <small><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> O username deverá ter pelo menos 6 caracteres. Utilize apenas caracteres alfanúmericos.</small>
+      </div>
+      <div [hidden]="password.pristine || password.valid" class="mb-1">
+        <small><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> A password deverá ter entre 8 e 24 caracteres. Utilize apenas caracteres alfanúmericos.</small>
+      </div>
+      <div [hidden]="confirmPassword.pristine || (confirmPassword.valid && passwordsMatch)">
+        <small><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Verifique se a confirmação da password está correcta.</small>
+      </div>
+      <div [hidden]="registerForm.form.valid">
+        <small><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Preencha todos os campos.</small>
+      </div>
+    </div>
+
+    <button test-tag="register-form-submit" (click)="register(); $event.preventDefault()" type="submit" class="btn btn-primary btn-sm btn-block"
+          [disabled]="!(registerForm.form.valid && passwordsMatch)">Registar</button>
+
+
+  </form>
+
+  <!--REGISTER WAITING-->
+  <div *ngSwitchCase="'wait'" class="p-2 bg-secondary">
+    <div class="mt-1">a registar... <i class="fa fa-spinner fa-spin"></i> </div>
+  </div>
+
+  <!--REGISTER SUBMITED WITH SUCCESS-->
+  <div *ngSwitchCase="'success'" class="p-1 bg-secondary">
+    <div class="alert alert-success" test-tag="register-success-msg">Registo efectuado com sucesso!</div>
+    <div class="mt-1">efectuando login... <i class="fa fa-spinner fa-spin"></i> </div>
+  </div>
+
+
+  <!--REGISTER SUBMITED WITH ERRORS-->
+  <div *ngSwitchCase="'fail'" class="p-2 bg-secondary">
+
+    <!-- display errors -->
+    <div class="alert alert-warning text-left p-1 mb-2">
+      <div [hidden]="!registerError.existingEmail" class="mb-1">
+        <small><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> O e-mail já existe!</small>
+      </div>
+
+      <div [hidden]="!registerError.existingUsername">
+        <small><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> O username escolhido já existe!</small>
+      </div>
+
+      <div [hidden]="!registerError.passwordsDoNotMatch">
+        <small><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> A password não foi correctamente confirmada!</small>
+      </div>
+
+      <div [hidden]="!(registerError.invalidEmail || registerError.invalidUsername || registerError.invalidPassword || registerError.invalidConfirmPassword )">
+        <small><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Um ou mais campos submetidos são invalidos!</small>
+      </div>
+    </div>
+
+    <!-- link to go back to register form -->
+    <button class="btn btn-dark btn-sm btn-block" role="button" (click)="backToForm(); $event.preventDefault()">Modificar registo</button>
+
+  </div>
+</div>
+

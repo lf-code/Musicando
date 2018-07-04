@@ -1,0 +1,87 @@
+
+<div class="card border rounded-0 border-dark mt-2 my-shadow p-0">
+
+  <div class="my-shadow-inset">
+
+    <!-- HEADER -->
+    <div class="text-white text-center font-weight-bold bg-dark w-100  d-flex flex-row align-items-center">
+      <div class="text-center" style="width:31px;"><span><i class="fa fa-bars" aria-hidden="true"></i></span></div>
+      <div style="flex-grow:1; flex-shrink:1;"><span>Música - Opções</span></div>
+      <div><button class="btn btn-sm btn-dark" (click)="close(null)" type="button"><i class="fa fa-close" aria-hidden="true"></i></button></div>
+    </div>
+
+    <div class="p-1 bg-secondary">
+
+      <div *ngIf="!availableOptions.waiting">
+
+        <!-- SONG INFO -->
+        <div *ngIf="!hasMultipleSongs" class="text-center text-white p-2 bg-dark border border-dark my-shadow">
+          <p class="text-truncate font-weight-bold m-0">{{songOptionsContext.songs[0].name}}</p>
+          <p class="text-truncate m-0">
+            {{songOptionsContext.songs[0].artistName}}
+            <span *ngIf="songOptionsContext.songs[0].albumName != null && songOptionsContext.songs[0].albumName !== ''"> - {{songOptionsContext.songs[0].albumName}}</span>
+          </p>
+        </div>
+
+        <div *ngIf="hasMultipleSongs" class="text-center text-white p-2 bg-dark border border-dark my-shadow">
+          <h5 class="text-truncate p-0 m-0">Várias canções selecionadas</h5>
+        </div>
+
+        <!-- ADD TO PLAYLIST OPTION -->
+        <div *ngIf="availableOptions.add" class="text-center mt-1 border border-dark my-shadow">
+          <h6 class="border-dark bg-dark text-white p-1 m-0">Adicionar a Playlist</h6>
+          <div class="p-1 bg-dark border border-dark">
+            <div class="list-group my-scroll" style="max-height:200px; overflow-y:auto">
+              <button style="min-height:26px;" type="button" class="list-group-item list-group-item-action p-0 border-0 rounded-0 my-cursor-pointer "
+                      *ngFor="let p of authuserPlaylistsAvailableForAdding"
+                      [ngClass]="{'list-group-item-secondary':p.playlistId===selectedPlaylistForAdding.playlistId}" (click)="selectedPlaylistForAdding=p">
+                {{p.name}}
+              </button>
+            </div>
+
+          </div>
+          <div class="p-1 bg-dark">
+            <button href="#" class="btn btn-primary btn-sm btn-block border-0 text-truncate" (click)="addSongsToSelectedPlaylist();">Adicionar a "{{selectedPlaylistForAdding.name}}"</button>
+          </div>
+        </div>
+
+        <!-- REMOVE FROM PLAYLIST OPTION -->
+        <div *ngIf="availableOptions.remove" class="text-center mt-1 border border-dark my-shadow">
+          <h6 class="bg-dark text-white p-1 m-0">Remover da Playlist</h6>
+          <div class="bg-dark p-1">
+            <button href="#" class="btn btn-danger btn-sm btn-block border-0 text-truncate" (click)="removeSongFromPlaylist()">Remover de "{{songOptionsContext.playlist.name}}"</button>
+          </div>
+        </div>
+
+        <!-- CHANGE POSITION IN PLAYLIST OPTION -->
+        <div *ngIf="availableOptions.changePosition" class="text-center mt-1 border border-dark my-shadow">
+          <h6 class="border-dark bg-dark text-white p-1 m-0">Mover na Playlist</h6>
+          <p class="bg-dark text-muted m-0">Escolha uma nova posição na playlist</p>
+          <div class="p-1 bg-dark d-flex flex-row justify-content-center ">
+            <button class="my-btn-icon-playablesongoptions bg-dark text-white" (click)="changePosition(false)"><i class="fa fa-chevron-circle-left" aria-hidden="true"></i></button>
+            <span class="d-block bg-faded text-white" style="width:30px;">{{newPositionInPlaylist+1}}</span>
+            <button class="my-btn-icon-playablesongoptions bg-dark text-white" (click)="changePosition(true)"><i class="fa fa-chevron-circle-right" aria-hidden="true"></i></button>
+          </div>
+          <div class="bg-dark p-1">
+            <button class="btn btn-primary btn-sm btn-block border-0 text-truncate" [disabled]="newPositionInPlaylist == songOptionsContext.songPositionInPlaylist"
+                    (click)="changeSongPositionInPlaylist()">
+              Mover em "{{songOptionsContext.playlist.name}}"
+            </button>
+          </div>
+        </div>
+
+        <!-- NO OPTIONS AVAILABLE -->
+        <div *ngIf="availableOptions.noOptions" class="card text-center mt-1 border-dark my-shadow">
+          <h6 class="p-1">Não há opções disponíveis. Crie uma playlist.</h6>
+        </div>
+      </div>
+
+      <div *ngIf="availableOptions.waiting" class="card text-center mt-1 border-dark my-shadow p-1">
+        <h6 class="p-1 m-0"> Aguarde <i class="fa fa-spinner fa-pulse" aria-hidden="true"></i></h6>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

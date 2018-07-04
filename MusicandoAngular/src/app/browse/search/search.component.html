@@ -1,0 +1,62 @@
+<div [ngSwitch]="searchStateSwitch.currentState" class="mt-3 w-100">
+
+  <!--SEARCH FORM-->
+  <div *ngSwitchCase="'form'">
+    <form #searchForm="ngForm">
+      <div class="row mb-2">
+        <div class="col input-group">
+          <input class="form-control border border-dark" placeholder="Procurar..." name="searchText
+               " [(ngModel)]="searchText">
+          <span class="input-group-btn">
+            <button class="btn btn-secondary border border-dark" type="submit" [disabled]="!isValid" (click)="search(); $event.preventDefault()">Procurar</button>
+          </span>
+        </div>
+      </div>
+
+      <div class="row m-0 input-group">
+        <div class="col text-center text-white form-check">
+          <input class="form-check-input" type="radio" name="search" id="artist-rb" [(ngModel)]="searchType" value="artist" checked>
+          <label class="form-check-label pl-1 pb-1" for="artist-rb">Artista</label>
+        </div>
+        <div class="col text-center text-white form-check">
+          <input class="form-check-input" type="radio" name="search" id="album-rb" [(ngModel)]="searchType" value="album">
+          <label class="form-check-label pl-1 pb-1" for="album-rb">Album</label>
+        </div>
+        <div class="col text-center text-white form-check">
+          <input class="form-check-input" type="radio" name="search" id="song-rb" [(ngModel)]="searchType" value="song">
+          <label class="form-check-label pl-1 pb-1" for="song-rb">Canção</label>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!--SEARCH WAIT-->
+  <div *ngSwitchCase="'wait'">
+    <div class="alert alert-light text-center m-0" role="alert">
+      a procurar <i class="fa fa-spinner fa-pulse" aria-hidden="true"></i>
+    </div>
+  </div>
+
+  <!--SEARCH FAIL-->
+  <div *ngSwitchCase="'fail'">
+    <div class="alert alert-danger text-center m-0" role="alert">
+      ocorreu um erro <i class="fa fa-frown-o" aria-hidden="true"></i>
+    </div>
+  </div>
+
+  <!--SEARCH RESULTS-->
+  <div *ngSwitchCase="'success'">
+    <div class="mb-2"><button class="btn btn-block btn-sm btn-outline-primary" (click)="searchReset(true)">Nova Procura</button></div>
+    <div *ngIf="results.length===0" class="alert alert-warning text-center m-0" role="alert">
+      sem resultados <i class="fa fa-frown-o" aria-hidden="true"></i>
+    </div>
+    <div *ngFor="let r of results" class="d-flex flex-row my-1">
+      <div class="bg-light p-1 border border-light text-center" style="width:75px">{{r.type}}</div>
+      <div style="flex-grow:1; flex-shrink:1" class="border border-light">
+        <button title="mostrar" class="btn btn-dark btn-block text-center text-truncate p-1 m-0" (click)="searchGoTo(r)">{{r.name}}</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+

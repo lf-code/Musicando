@@ -1,0 +1,55 @@
+
+<!--PRIVATE SONGS-->
+<div class="card mt-2 my-shadow">
+
+  <!--PRIVATE SONGS HEADER-->
+  <div class="card-header bg-light py-1 px-2 d-flex justify-content-between align-items-center">
+    <div style="flex-grow:1; flex-shrink:1"><h6 class="m-0">Músicas Privadas</h6></div>
+    <button type="button" title="tocar playlist" (click)="playPrivateSongPlaylist()" *ngIf="showPlayPlaylistButton" class="btn btn-light btn-sm d-block mx-1" style="width:32px;">
+      <i class="fa fa-music" aria-hidden="true"></i>
+    </button>
+    <button type="button" title="criar nova" [disabled]="showStateSwitch.currentState !== 'list'" (click)="openNew()" class="btn btn-light btn-sm d-block" style="width:32px;">
+      <i class="fa fa-plus" aria-hidden="true"></i>
+    </button>
+  </div>
+
+  <!--PRIVATE SONGS LIST-->
+  <div [ngSwitch]="showStateSwitch.currentState">
+
+    <div *ngSwitchCase="'wait'" class="card-body p-1">
+      <div class="text-center p-1"><i class="fa fa-spinner fa-pulse"></i></div>
+    </div>
+
+    <div *ngSwitchCase="'list'" class="card-body p-1">
+
+      <!--IF NO PRIVATE SONGS-->
+      <div *ngIf="!hasPrivateSongs" class="text-center p-1">
+        <button type="button" class="btn btn-link text-secondary" (click)="openNew()">Adicione uma música privada</button>
+      </div>
+
+      <!-- LIST -->
+      <div *ngIf="hasPrivateSongs" class="list-group my-scroll" style="max-height:103px; overflow-y:auto">
+        <div class="list-group-item list-group-item-action d-flex flex-nowrap align-items-center p-1 pl-2 my-cursor-pointer" *ngFor="let p of privateSongs" (click)="playPrivateSong(p)" style="min-height:35px;">
+          <div class="text-truncate" style="flex-grow:1;flex-shrink:1;">{{p.name}}</div>
+          <button title="opções" (click)="$event.preventDefault(); $event.stopPropagation(); openOptions(p)" type="button" class="btn btn-light btn-sm" style="flex-grow:0;flex-shrink:0;"><i class="fa fa-ellipsis-h" aria-hidden="true"></i></button>
+        </div>
+      </div>
+
+    </div>
+
+    <div *ngSwitchCase="'newMenu'" class="card-body p-1">
+      <privatesongs-new (onClose)="closeNew($event)"></privatesongs-new>
+    </div>
+
+    <div *ngSwitchCase="'optionsMenu'" class="card-body p-1">
+      <privatesongs-options (onClose)="closeOptions($event)" [privateSongForOptions]="privateSongForOptions"></privatesongs-options>
+    </div>
+
+  </div>
+
+</div>
+
+
+
+
+

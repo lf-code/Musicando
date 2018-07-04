@@ -1,0 +1,95 @@
+.my-img-background{
+  background-size:cover;
+  background-position: center;
+}
+
+.my-overlay-title {
+  width: 100%;
+  height: 32px;
+  line-height: 28px;
+  font-size: 28px;
+  background-color: rgba(0,0,0,0.3);
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+}
+
+.my-overlay-title span{
+  visibility: hidden
+}
+
+.my-overlay-title:hover span {
+  visibility:visible;
+}
+
+/*ALBUM IMG ICON*/
+
+.my-album-container-img {
+  position:relative;
+  border: 3px solid transparent;
+  width: 100%;
+  padding-top:100%;
+  height: 100%;
+
+}
+
+.my-album-thumbnail {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+}
+
+/*OVERLAY PLAY BUTTON*/
+
+.my-album-play {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
+  opacity: 0;
+  background-color: grey;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.my-album-play i {
+  font-size: 60px;
+  color: white;
+}
+
+.my-album-play:hover {
+  opacity: 0.75;
+  transition: opacity 0.3s;
+}
+
+
+/*ALBUM NAME*/
+
+.my-album-container-name {
+}
+
+.my-album-container-name:hover {
+  cursor: pointer;
+}
+
+.my-album-container-name .my-album-tracks {
+  visibility: hidden;
+  font-size: 12px;
+}
+
+.my-album-container-name:hover .my-album-tracks {
+  visibility: visible;
+}
+
+
+

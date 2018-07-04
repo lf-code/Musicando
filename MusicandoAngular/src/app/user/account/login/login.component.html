@@ -1,0 +1,59 @@
+
+<div class="border border-dark" [ngSwitch]="loginStateSwitch.currentState">
+
+  <div class="text-white text-center font-weight-bold bg-dark w-100  d-flex flex-row align-items-center">
+    <div class="w-50"><span>Login</span></div>
+    <div class="w-50"><button class="btn btn-dark btn-block btn-sm text-primary" [disabled]="loginStateSwitch.currentState !== 'form'" (click)="goToRegister()" type="button"><small>REGISTAR</small></button></div>
+  </div>
+
+  <form #loginForm="ngForm" id="loginForm" *ngSwitchCase="'form'" class="bg-secondary p-2">
+
+    <div>
+
+      <div class="input-group input-group-sm mb-1">
+        <span class="input-group-addon p-0 d-block text-center border-dark font-weight-bold" style="line-height:31px; width:72px;" id="name">username</span>
+        <input [(ngModel)]="loginData.username" #username="ngModel" name="username" type="text" id="loginUsername" pattern="[A-Za-z0-9_]{4,16}" required  class="form-control border-dark">
+      </div>
+
+      <div class="input-group input-group-sm mb-1">
+        <span class="input-group-addon p-0 d-block text-center border-dark font-weight-bold" style="line-height:31px; width:72px;" id="name">password</span>
+        <input [(ngModel)]="loginData.password" #password="ngModel" name="password" type="password"   id="loginPassword" pattern="[A-Za-z0-9]{8,16}" required [disabled]="username.invalid" class="form-control border-dark">
+      </div>
+
+
+      <!--ALERTS-->
+      <div class="alert alert-warning px-2 py-1 text-left" role="alert" [hidden]="!(password.touched && username.touched && loginForm.form.invalid)">
+        <div class="mb-1">
+          <small><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Preencha todos os campos.</small>
+        </div>
+        <div>
+          <small><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Utilize apenas caracteres válidos.</small>
+        </div>
+      </div>
+
+    </div>
+
+    <!--LOGIN SUBMIT-->
+    <button test-tag="login-form-submit" id="btn-login" (click)="login();loginForm.reset(); $event.preventDefault()"
+          [disabled]="loginForm.form.invalid || loginStateSwitch.currentState !== 'form'"
+            type="submit" class="btn btn-primary btn-block btn-sm">Login</button>
+
+  </form>
+
+  <!--LOGIN WAIT-->
+  <div *ngSwitchCase="'wait'" class="bg-secondary p-2">
+    <div>autenticando... <span><i class="fa fa-spinner fa-pulse" aria-hidden="true"></i></span></div>
+  </div>
+
+  <!--LOGIN FAIL-->
+  <div *ngSwitchCase="'fail'" class="bg-secondary p-2">
+    <div class="alert alert-danger text-center mb-2" role="alert">
+      <div>
+        <small><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> <span test-tag="login-fail-msg">Login não autorizado.</span></small>
+      </div>
+    </div>
+    <button class="btn btn-dark btn-sm btn-block" role="button" (click)="backToForm()">tentar novamente</button>
+  </div>
+
+
+</div>

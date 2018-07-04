@@ -1,0 +1,168 @@
+
+<div class="border-rounded-0 border-dark bg-secondary my-shadow-inset">
+
+  <div class="text-white text-center font-weight-bold bg-dark w-100  d-flex flex-row align-items-center">
+    <div class="text-center" style="width:31px;"><span><i class="fa fa-cog" aria-hidden="true"></i></span></div>
+    <div style="flex-grow:1; flex-shrink:1;"><span>Opções</span></div>
+    <div><button class="btn btn-sm btn-dark" [disabled]="!allowClose" (click)="close(null)" type="button"><i class="fa fa-close" aria-hidden="true"></i></button></div>
+  </div>
+
+  <div class="border-dark bg-secondary my-shadow-inset p-1">
+
+    <!-- LOAD PRIVATE SONG INFO -->
+    <div [ngSwitch]="loadStateSwitch.currentState">
+
+      <!-- LOAD SONG WAIT -->
+      <div id="load-wait" *ngSwitchCase="'wait'">
+        <div class="alert alert-light text-center m-0 p-1" role="alert">
+          a carregar  <i class="fa fa-spinner fa-pulse" aria-hidden="true"></i>
+        </div>
+      </div>
+
+      <!-- LOAD SONG FAIL -->
+      <div id="load-fail" *ngSwitchCase="'fail'">
+        <div class="alert alert-danger text-center m-0 p-1" role="alert">
+          ocorreu um erro <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+        </div>
+      </div>
+
+      <!-- LOAD SONG SUCCESS (SHOW OPTIONS) -->
+      <div *ngSwitchCase="'success'">
+
+
+        <div class="bg-dark text-center border border-dark my-shadow p-1 mb-1">
+          <p class="text-white font-italic m-0">{{privateSongForOptions.name}}</p>
+        </div>
+
+        <!-- EDIT SONG OPTION -->
+        <div *ngIf="editStateSwitch.currentState != 'hidden'" [ngSwitch]="editStateSwitch.currentState" id="option-edit" class="bg-dark p-1">
+          <h6 class="bg-dark text-center text-white p-1 m-0">Editar Música</h6>
+
+          <div *ngSwitchCase="'show'">
+
+            <!-- EDIT FORM -->
+            <form #editPrivateSongForm="ngForm">
+
+              <div class="input-group input-group-sm mt-1">
+                <span class="input-group-addon p-0 d-block w-25 text-center border-dark" style="line-height:31px;" id="name">Título</span>
+                <input [(ngModel)]="editedPrivateSong.name" name="name" type="text" quired maxlength="30" class="form-control">
+              </div>
+
+              <div class="input-group input-group-sm mt-1">
+                <span class="input-group-addon p-0 d-block w-25 text-center border-dark" style="line-height:31px;" id="artistName">Artista</span>
+                <input [(ngModel)]="editedPrivateSong.artistName" name="artistName" required maxlength="30" type="text" class="form-control">
+              </div>
+
+              <div class="input-group input-group-sm mt-1">
+                <span class="input-group-addon p-0 d-block w-25 text-center border-dark" style="line-height:31px;" id="albumName">Album</span>
+                <input [(ngModel)]="editedPrivateSong.albumName" name="albumName" type="text" maxlength="30" class="form-control">
+              </div>
+
+              <div class="input-group input-group-sm mt-1">
+                <span class="input-group-addon p-0 d-block w-50 text-center border-dark" style="line-height:29px;">Começar em:</span>
+                <input [(ngModel)]="editedPrivateSong.startAt" name="startAt" type="text"
+                       class="form-control form-control-sm text-center p-0" id="startAt" placeholder="00:00:00" pattern="[0-9][0-9]:[0-9][0-9]:[0-9][0-9]">
+              </div>
+
+              <div class="input-group input-group-sm mt-1">
+                <span class="input-group-addon p-0 d-block w-50 text-center border-dark" style="line-height:29px;">Parar em:</span>
+                <input [(ngModel)]="editedPrivateSong.endAt" name="endAt" type="text"
+                       class="form-control form-control-sm text-center p-0" id="endAt" placeholder="00:00:01" pattern="[0-9][0-9]:[0-9][0-9]:[0-9][0-9]">
+              </div>
+
+              <div class="w-100 text-center mt-2">
+                <button type="submit" class="btn btn-sm btn-block btn-primary " [disabled]="!editPrivateSongForm.valid" (click)="editPrivateSong(); $event.preventDefault()">guardar alterações</button>
+              </div>
+
+            </form>
+
+          </div>
+
+          <!-- EDIT WAIT -->
+          <div id="editForm-wait" *ngSwitchCase="'wait'">
+            <div class="alert alert-light text-center m-0" role="alert">
+              a modificar música  <i class="fa fa-spinner fa-pulse" aria-hidden="true"></i>
+            </div>
+          </div>
+
+          <!-- EDIT SUCCESS -->
+          <div id="editForm-success" *ngSwitchCase="'success'">
+            <div class="alert alert-success text-center m-0" role="alert">
+              a música foi modificada <i class="fa fa-check-circle" aria-hidden="true"></i>
+            </div>
+          </div>
+
+          <!-- EDIT FAIL -->
+          <div id="editForm-fail" *ngSwitchCase="'fail'">
+            <div class="alert alert-danger text-center m-0" role="alert">
+              ocorreu um erro <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- DELETE SONG OPTION -->
+        <div *ngIf="deleteStateSwitch.currentState != 'hidden'" id="option-delete" class="p-0">
+
+          <div class="p-0" [ngSwitch]="deleteStateSwitch.currentState">
+
+            <!-- DELETE FORM -->
+            <div id="deleteForm-form" *ngSwitchCase="'show'" class="text-center mt-1 border border-dark my-shadow">
+              <h6 class="bg-dark text-white p-1 m-0">Apagar Música</h6>
+              <div class="bg-dark p-1">
+                <form #deleteForm="ngForm">
+                  <button (click)="deletePrivateSong(); $event.preventDefault()" [disabled]="deleteForm.invalid" class="btn btn-danger btn-sm btn-block" type="submit">apagar</button>
+                </form>
+              </div>
+            </div>
+
+            <!-- DELETE WAIT -->
+            <div id="deleteForm-wait" *ngSwitchCase="'wait'">
+              <div class="alert alert-light text-center m-0" role="alert">
+                a apagar música  <i class="fa fa-spinner fa-pulse" aria-hidden="true"></i>
+              </div>
+            </div>
+
+            <!-- DELETE SUCCESS -->
+            <div id="deleteForm-success" *ngSwitchCase="'success'">
+              <div class="alert alert-success text-center m-0" role="alert">
+                a música foi apagada <i class="fa fa-check-circle" aria-hidden="true"></i>
+              </div>
+            </div>
+
+            <!-- DELETE FAIL -->
+            <div id="deleteForm-fail" *ngSwitchCase="'fail'">
+              <div class="alert alert-danger text-center m-0" role="alert">
+                ocorreu um erro <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- ADD TO PLAYLIST OPTION -->
+        <div *ngIf="addToPlaylistStateSwitch.currentState != 'hidden'" id="option-addToPlaylist" class="p-0">
+
+          <div class="p-0">
+            <div class="text-center mt-1 border border-dark my-shadow">
+              <h6 class="bg-dark text-white p-1 m-0">Adicionar a Playlist</h6>
+              <div class="bg-dark p-1">
+                <button (click)="addToPlaylist()" class="btn btn-primary btn-sm btn-block" type="submit">adicionar</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
